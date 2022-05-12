@@ -1,0 +1,77 @@
+{% extends 'bootstrap/base.html' %}
+
+{% block content %}
+{% include "header.html" %}
+  <!-- Page Header -->
+  <header class="masthead" style="background-image: url('{{ url_for('static', filename='img/edit-bg.jpg')}}')">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="page-heading">
+            {% if my_post_form %}
+            <h1>New Post</h1>
+            {% elif edit_post_form %}
+            <h1>Edit Post</h1>
+            {% endif %}
+            <span class="subheading">You're going to make a great blog post!</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+<div class="container">
+  <div class="row">
+    <div class="col-lg-8 col-md-10 mx-auto">
+      {% if my_post_form %}
+      <form method="post">
+        {{ my_post_form.title.label }}<br>
+        {{ my_post_form.title }}<br>
+        {{ my_post_form.subtitle.label }}<br>
+        {{ my_post_form.subtitle }}<br>
+        {{ my_post_form.author.label }}<br>
+        {{ my_post_form.author }}<br>
+        {{ my_post_form.img_url.label }}<br>
+        {{ my_post_form.img_url }}<br>
+        {{ my_post_form.body.label }}<br>
+        {{ my_post_form.body }}<br>
+        {{ my_post_form.submit.label }}<br>
+        {{ my_post_form.submit }}<br>
+
+        {{ ckeditor.load() }}
+        {{ ckeditor.config(name='body') }}
+
+      </form>
+      {% elif edit_post_form %}
+      <form method="post">
+        {{ edit_post_form.title.label }}<br>
+        {{ edit_post_form.title(value=post.title) }}<br>
+        {{ edit_post_form.subtitle.label }}<br>
+        {{ edit_post_form.subtitle(value=post.subtitle) }}<br>
+        {{ edit_post_form.author.label }}<br>
+        {{ edit_post_form.author(value=post.author) }}<br>
+        {{ edit_post_form.img_url.label }}<br>
+        {{ edit_post_form.img_url(value=post.img_url) }}<br>
+        {{ edit_post_form.body.label }}<br>
+
+        <!--        TODO figure out how to insert value into ckeditor-->
+
+        {{ edit_post_form.body(value=ck_editor_value | safe) }}<br>
+        <!--        TODO this inputs preset value to the ckeditor but doesnt save data-->
+        <!--{{ ckeditor.create(value=ck_editor_value) }}-->
+
+        <!--Submit button-->
+        {{ edit_post_form.submit.label }}<br>
+        {{ edit_post_form.submit }}<br>
+        <!--Set up ckeditors field into second_post_forms body-->
+        {{ ckeditor.load() }}
+        {{ ckeditor.config(name='body') }}
+      </form>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% include "footer.html" %}
+{% endblock %}
